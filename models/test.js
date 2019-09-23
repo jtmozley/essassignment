@@ -1,44 +1,57 @@
 module.exports = function(sequelize, DataTypes) {
-  var Test = sequelize.define("Test", {
-    course_id: {
-      type: DataTypes.INTEGER(10).UNSIGNED,
-      allowNull: false,
-      field: "course_id"
-    },
-    numOfQuestions: {
-      type: DataTypes.INTEGER(10).UNSIGNED,
-      allowNull: false,
-      field: "num_of_questions"
-    },
-    name: {
-      type: DataTypes.STRING(50),
-      allowNull: true,
-      field: "name"
-    },
-    duration: {
-      type: DataTypes.STRING(10),
-      allowNull: true,
-      field: "duration"
-    },
-    createdAt: {
-      type: DataTypes.DATE,
-      allowNull: true,
-      defaultValue: sequelize.literal("NOW()")
-    },
-    updatedAt: {
-      type: DataTypes.DATE,
-      allowNull: true,
-      defaultValue: sequelize.literal("NOW()")
-    }
-  });
-
-  Test.associate = function(models) {
-    models.Test.belongsTo(models.Course, {
-      foreignKey: {
+  var tests = sequelize.define(
+    "tests",
+    {
+      id: {
+        type: DataTypes.INTEGER(11),
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        field: "id"
+      },
+      courseId: {
+        type: DataTypes.INTEGER(10),
+        allowNull: false,
+        field: "course_id"
+      },
+      num_of_questions: {
+        type: DataTypes.INTEGER(10),
         allowNull: false
+      },
+      name: {
+        type: DataTypes.STRING(50),
+        allowNull: true
+      },
+      duration: {
+        type: DataTypes.STRING(10),
+        allowNull: true
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        defaultValue: sequelize.literal("NOW()")
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        defaultValue: sequelize.literal("NOW()")
       }
+    },
+    { tableName: "tests" }
+  );
+
+  tests.associate = function(models) {
+    models.tests.belongsTo(models.courses, {
+      foreignKey: "id",
+      as: "test",
+      uniqueKey: "test"
     });
   };
 
-  return Test;
+  // 		models.applications.hasMany(models.answers, {
+  // 	as: 'answers',
+  // 	foreignKey: 'application_id',
+  // 	uniqueKey: 'answers'
+  // });
+  return tests;
 };
