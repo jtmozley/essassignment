@@ -21,7 +21,7 @@ require("./routes/course-api-routes.js")(app);
 require("./routes/test-api-routes.js")(app);
 
 //sync sequelize to database and force table reset
-db.sequelize.sync({ force: false }).then(function() {
+db.sequelize.sync({ force: true }).then(function() {
   //add test data into fresh tables
   var run = require("./scripts/seedDB");
 

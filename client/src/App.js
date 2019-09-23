@@ -127,7 +127,11 @@ class App extends Component {
               // className={classes.textField}
               // value={values.name}
               // onChange={handleChange("name")}
-              style={{ marginRight: "10px", width: "200px" }}
+              style={{
+                marginLeft: "10px",
+                marginRight: "10px",
+                width: "200px"
+              }}
               margin="normal"
             />
             <TextField

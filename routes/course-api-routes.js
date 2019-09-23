@@ -1,14 +1,18 @@
 var db = require("../models");
 
 module.exports = function(app) {
-
   //route to pull all courses and associated tests
   app.get("/api/courses", function(req, res) {
     db.Course.findAll({
-      include: [db.Test]
+      include: [
+        {
+          model: db.Test,
+          as: "Test"
+        }
+      ]
     }).then(function(dbCourses) {
       res.json(dbCourses);
-
+      console.log(dbCourses);
     });
   });
 
@@ -41,5 +45,4 @@ module.exports = function(app) {
       res.json(dbCourses);
     });
   });
-
 };
