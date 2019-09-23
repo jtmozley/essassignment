@@ -1,4 +1,5 @@
 var express = require("express");
+//cors allows react port to grab data from server port
 var cors = require("cors");
 
 //sets up the express App
@@ -20,7 +21,7 @@ require("./routes/course-api-routes.js")(app);
 require("./routes/test-api-routes.js")(app);
 
 //sync sequelize to database and force table reset
-db.sequelize.sync({ force: true }).then(function() {
+db.sequelize.sync({ force: false }).then(function() {
   //add test data into fresh tables
   var run = require("./scripts/seedDB");
 

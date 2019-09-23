@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import "./App.css";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -7,6 +6,8 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import Container from "@material-ui/core/Container";
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
 
 class App extends Component {
   constructor(props) {
@@ -65,6 +66,92 @@ class App extends Component {
             </TableBody>
           </Table>
         </Paper>
+        <form
+          style={{ display: "flex", flexWrap: "wrap" }}
+          noValidate
+          autoComplete="off"
+        >
+          <div>
+            <TextField
+              id="standard-name"
+              label="Name"
+              // className={classes.textField}
+              // value={values.name}
+              // onChange={handleChange("name")}
+              style={{ marginRight: "10px", width: "200px" }}
+              margin="normal"
+            />
+            <TextField
+              id="standard-domain"
+              label="Domain"
+              // className={classes.textField}
+              // value={values.name}
+              // onChange={handleChange("name")}
+              style={{
+                marginLeft: "10px",
+                marginRight: "10px",
+                width: "200px"
+              }}
+              margin="normal"
+            />
+            <TextField
+              id="standard-description"
+              label="Description"
+              // className={classes.textField}
+              // value={values.name}
+              // onChange={handleChange("name")}
+              style={{
+                marginLeft: "10px",
+                marginRight: "10px",
+                width: "400px"
+              }}
+              margin="normal"
+            />
+          </div>
+          <div>
+            <TextField
+              id="standard-courseId"
+              label="Course ID"
+              // className={classes.textField}
+              // value={values.name}
+              // onChange={handleChange("name")}
+              style={{
+                marginRight: "10px",
+                width: "200px"
+              }}
+              margin="normal"
+            />
+            <TextField
+              id="standard-testName"
+              label="Test Name"
+              // className={classes.textField}
+              // value={values.name}
+              // onChange={handleChange("name")}
+              style={{ marginRight: "10px", width: "200px" }}
+              margin="normal"
+            />
+            <TextField
+              id="standard-duration"
+              label="Duration"
+              // className={classes.textField}
+              // value={values.name}
+              // onChange={handleChange("name")}
+              style={{
+                marginLeft: "10px",
+                marginRight: "10px",
+                width: "200px"
+              }}
+              margin="normal"
+            />
+          </div>
+        </form>
+        <Button
+          variant="contained"
+          color="primary"
+          style={{ marginTop: "25px", marginBottom: "10px" }}
+        >
+          New Course
+        </Button>
       </Container>
     );
   }

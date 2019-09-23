@@ -29,7 +29,7 @@ module.exports = function(sequelize, DataTypes) {
   });
 
   Course.associate = function(models) {
-    models.Course.hasMany(models.Test, {
+    models.Course.hasOne(models.Test, {
       onDelete: "cascade"
     });
   };
