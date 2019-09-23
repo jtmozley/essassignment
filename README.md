@@ -2,9 +2,9 @@
 
 Clone repo to local
 
-CD into local repo and `npm install && npm start` to start express server
+CD into local repo and `npm start` to start express server
 
-In a second terminal tab CD into client and `npm start` to run react app
+In a second terminal tab CD into client and `npm install && npm start` to run react app
 
 You will notice that the assignment is incomplete.
 
