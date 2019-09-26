@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import Axios from "axios";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -13,9 +14,48 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: []
+      data: [],
+      name: "",
+      domain: "",
+      description: "",
+      courseId: "",
+      num_of_questions: "",
+      duration: ""
     };
+
+    this.handleChange = this.handleChange.bind(this);
+    this.submitData = this.submitData.bind(this);
+    this.getData = this.getData.bind(this);
+    this.secondSubmit = this.secondSubmit.bind(this);
   }
+
+  submitData = e => {
+    e.preventDefault();
+    Axios.post("/api/courses", {
+      name: this.state.name,
+      domain: this.state.domain,
+      description: this.state.description,
+      id: 3,
+      courseId: this.state.courseId,
+      duration: this.state.duration,
+      num_of_questions: this.state.num_of_questions
+    })
+      .then(response => console.log(response))
+      .then(this.getData())
+      .catch(error => console.log(error));
+  };
+
+  secondSubmit = e => {
+    e.preventDefault();
+    Axios.post("/api/tests", {
+      courseId: this.state.courseId,
+      duration: this.state.duration,
+      num_of_questions: this.state.num_of_questions
+    })
+      .then(response => console.log(response))
+      .then(this.getData())
+      .catch(error => console.log(error));
+  };
 
   getData = () => {
     fetch("/api/courses", {
@@ -28,6 +68,14 @@ class App extends Component {
         });
         console.log(this.state.data);
       });
+  };
+
+  handleChange = event => {
+    const target = event.target;
+    const name = target.id;
+    const value = target.value;
+
+    this.setState({ [name]: value });
   };
 
   //on component mount call getData for api request
@@ -43,11 +91,11 @@ class App extends Component {
             <TableHead>
               <TableRow>
                 <TableCell>Name</TableCell>
-                <TableCell align="right">Domain</TableCell>
-                <TableCell align="right">Description</TableCell>
-                <TableCell align="right">Course ID</TableCell>
-                <TableCell align="right">Test Name</TableCell>
-                <TableCell align="right">Duration</TableCell>
+                <TableCell>Domain</TableCell>
+                <TableCell>Description</TableCell>
+                <TableCell>Course ID</TableCell>
+                <TableCell>Duration</TableCell>
+                <TableCell>No. Questions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -56,11 +104,11 @@ class App extends Component {
                   <TableCell component="th" scope="row">
                     {row.name}
                   </TableCell>
-                  <TableCell align="right">{row.domain}</TableCell>
-                  <TableCell align="right">{row.description}</TableCell>
-                  <TableCell align="right">{row.course_Id}</TableCell>
-                  <TableCell align="right">{row.testName}</TableCell>
-                  <TableCell align="right">{row.duration}</TableCell>
+                  <TableCell>{row.domain}</TableCell>
+                  <TableCell>{row.description}</TableCell>
+                  <TableCell>{row.test.courseId}</TableCell>
+                  <TableCell>{row.test.duration}</TableCell>
+                  <TableCell>{row.test.num_of_questions}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -73,20 +121,20 @@ class App extends Component {
         >
           <div>
             <TextField
-              id="standard-name"
+              required={true}
+              id="name"
               label="Name"
-              // className={classes.textField}
-              // value={values.name}
-              // onChange={handleChange("name")}
+              value={this.state.name}
+              onChange={this.handleChange}
               style={{ marginRight: "10px", width: "200px" }}
               margin="normal"
             />
             <TextField
-              id="standard-domain"
+              required={true}
+              id="domain"
               label="Domain"
-              // className={classes.textField}
-              // value={values.name}
-              // onChange={handleChange("name")}
+              value={this.state.domain}
+              onChange={this.handleChange}
               style={{
                 marginLeft: "10px",
                 marginRight: "10px",
@@ -95,11 +143,11 @@ class App extends Component {
               margin="normal"
             />
             <TextField
-              id="standard-description"
+              required={true}
+              id="description"
               label="Description"
-              // className={classes.textField}
-              // value={values.name}
-              // onChange={handleChange("name")}
+              value={this.state.description}
+              onChange={this.handleChange}
               style={{
                 marginLeft: "10px",
                 marginRight: "10px",
@@ -110,11 +158,11 @@ class App extends Component {
           </div>
           <div>
             <TextField
-              id="standard-courseId"
+              required={true}
+              id="courseId"
               label="Course ID"
-              // className={classes.textField}
-              // value={values.name}
-              // onChange={handleChange("name")}
+              value={this.state.courseId}
+              onChange={this.handleChange}
               style={{
                 marginRight: "10px",
                 width: "200px"
@@ -122,11 +170,11 @@ class App extends Component {
               margin="normal"
             />
             <TextField
-              id="standard-testName"
-              label="Test Name"
-              // className={classes.textField}
-              // value={values.name}
-              // onChange={handleChange("name")}
+              required={true}
+              id="duration"
+              label="Duration"
+              value={this.state.duration}
+              onChange={this.handleChange}
               style={{
                 marginLeft: "10px",
                 marginRight: "10px",
@@ -135,11 +183,11 @@ class App extends Component {
               margin="normal"
             />
             <TextField
-              id="standard-duration"
-              label="Duration"
-              // className={classes.textField}
-              // value={values.name}
-              // onChange={handleChange("name")}
+              required={true}
+              id="num_of_questions"
+              label="No. Questions"
+              value={this.state.num_of_questions}
+              onChange={this.handleChange}
               style={{
                 marginLeft: "10px",
                 marginRight: "10px",
@@ -149,10 +197,13 @@ class App extends Component {
             />
           </div>
         </form>
+
         <Button
           variant="contained"
           color="primary"
           style={{ marginTop: "25px", marginBottom: "10px" }}
+          onClick={this.submitData}
+          // onClick={this.secondSubmit}
         >
           New Course
         </Button>

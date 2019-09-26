@@ -44,14 +44,9 @@ module.exports = function(sequelize, DataTypes) {
     models.tests.belongsTo(models.courses, {
       foreignKey: "id",
       as: "test",
-      uniqueKey: "test"
+      uniqueKey: "test",
     });
   };
 
-  // 		models.applications.hasMany(models.answers, {
-  // 	as: 'answers',
-  // 	foreignKey: 'application_id',
-  // 	uniqueKey: 'answers'
-  // });
   return tests;
 };

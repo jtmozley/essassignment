@@ -9,7 +9,6 @@ module.exports = function(app) {
       })
       .then(function(dbCourses) {
         res.json(dbCourses);
-        console.log(dbCourses);
       });
   });
 
@@ -30,7 +29,7 @@ module.exports = function(app) {
   //route to create a course
   app.post("/api/courses", function(req, res) {
     db.courses.create(req.body).then(function(dbCourses) {
-      res.json(dbCourses);
+      return res.json(dbCourses);
     });
   });
 
