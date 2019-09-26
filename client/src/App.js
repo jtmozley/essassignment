@@ -35,25 +35,20 @@ class App extends Component {
       name: this.state.name,
       domain: this.state.domain,
       description: this.state.description,
-      id: 3,
-      courseId: this.state.courseId,
-      duration: this.state.duration,
-      num_of_questions: this.state.num_of_questions
     })
       .then(res => console.log(res))
+      .then(this.secondSubmit())
       .then(this.getData())
       .catch(err => console.log(err));
   };
 
-  secondSubmit = e => {
-    e.preventDefault();
+  secondSubmit = () => {
     Axios.post("/api/tests", {
       courseId: this.state.courseId,
       duration: this.state.duration,
       num_of_questions: this.state.num_of_questions
     })
       .then((res) => console.log(res))
-      .then(this.getData())
       .catch(err => console.log(err));
   };
 
@@ -203,7 +198,6 @@ class App extends Component {
           color="primary"
           style={{ marginTop: "25px", marginBottom: "10px" }}
           onClick={this.submitData}
-          // onClick={this.secondSubmit}
         >
           New Course
         </Button>
