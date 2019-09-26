@@ -40,9 +40,9 @@ class App extends Component {
       duration: this.state.duration,
       num_of_questions: this.state.num_of_questions
     })
-      .then(response => console.log(response))
+      .then(res => console.log(res))
       .then(this.getData())
-      .catch(error => console.log(error));
+      .catch(err => console.log(err));
   };
 
   secondSubmit = e => {
@@ -52,9 +52,9 @@ class App extends Component {
       duration: this.state.duration,
       num_of_questions: this.state.num_of_questions
     })
-      .then(response => console.log(response))
+      .then((res) => console.log(res))
       .then(this.getData())
-      .catch(error => console.log(error));
+      .catch(err => console.log(err));
   };
 
   getData = () => {
