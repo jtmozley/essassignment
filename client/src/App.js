@@ -34,7 +34,7 @@ class App extends Component {
     Axios.post("/api/courses", {
       name: this.state.name,
       domain: this.state.domain,
-      description: this.state.description,
+      description: this.state.description
     })
       .then(res => console.log(res))
       .then(this.secondSubmit())
@@ -48,7 +48,8 @@ class App extends Component {
       duration: this.state.duration,
       num_of_questions: this.state.num_of_questions
     })
-      .then((res) => console.log(res))
+      .then(res => console.log(res))
+      .then(this.getData())
       .catch(err => console.log(err));
   };
 

@@ -44,7 +44,7 @@ module.exports = function(sequelize, DataTypes) {
     models.tests.belongsTo(models.courses, {
       foreignKey: "id",
       as: "test",
-      uniqueKey: "test",
+      uniqueKey: "test"
     });
   };
 
