@@ -38,7 +38,7 @@ module.exports = function(sequelize, DataTypes) {
 
   courses.associate = function(models) {
     models.courses.hasOne(models.tests, {
-      onDelete: "cascade"
+      onDelete: "cascade",
     });
   };
 

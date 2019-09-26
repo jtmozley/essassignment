@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import Axios from "axios";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -7,199 +7,77 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import Container from "@material-ui/core/Container";
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
+import TableDisplay from "../components/TableDisplay";
+import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
 
-class Search extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      data: [],
-      name: "",
-      domain: "",
-      description: "",
-      courseId: "",
-      num_of_questions: "",
-      duration: ""
-    };
+export default function Search() {
+  const [theData, setTheData] = useState([]);
 
-    this.handleChange = this.handleChange.bind(this);
-    this.submitData = this.submitData.bind(this);
-    this.getData = this.getData.bind(this);
-    this.secondSubmit = this.secondSubmit.bind(this);
-  }
+  let id = 0;
 
-  submitData = e => {
-    e.preventDefault();
-    Axios.post("/api/courses", {
-      name: this.state.name,
-      domain: this.state.domain,
-      description: this.state.description,
-    })
-      .then(res => console.log(res))
-      .then(this.secondSubmit())
-      .then(this.getData())
+  const getData = () => {
+    Axios.get("/api/courses/" + id)
+      .then(res => {
+        setTheData(res);
+        console.log(res);
+      })
       .catch(err => console.log(err));
   };
 
-  secondSubmit = () => {
-    Axios.post("/api/tests", {
-      courseId: this.state.courseId,
-      duration: this.state.duration,
-      num_of_questions: this.state.num_of_questions
-    })
-      .then((res) => console.log(res))
-      .catch(err => console.log(err));
+  const handleChange = event => {
+    id = event.target.value;
+    getData();
+    console.log(id);
   };
 
-  getData = () => {
-    fetch("/api/courses", {
-      method: "GET"
-    })
-      .then(res => res.json())
-      .then(data => {
-        this.setState({
-          data: data
-        });
-        console.log(this.state.data);
-      });
-  };
-
-  handleChange = event => {
-    const target = event.target;
-    const name = target.id;
-    const value = target.value;
-
-    this.setState({ [name]: value });
-  };
-
-
-  render() {
-    return (
-      <Container>
-        <Paper className="root">
-          <Table className="table">
-            <TableHead>
-              <TableRow>
-                <TableCell>Name</TableCell>
-                <TableCell>Domain</TableCell>
-                <TableCell>Description</TableCell>
-                <TableCell>Course ID</TableCell>
-                <TableCell>Duration</TableCell>
-                <TableCell>No. Questions</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {this.state.data.map(row => (
-                <TableRow key={row.name}>
-                  <TableCell component="th" scope="row">
-                    {row.name}
-                  </TableCell>
-                  <TableCell>{row.domain}</TableCell>
-                  <TableCell>{row.description}</TableCell>
-                  <TableCell>{row.test.courseId}</TableCell>
-                  <TableCell>{row.test.duration}</TableCell>
-                  <TableCell>{row.test.num_of_questions}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </Paper>
-        <form
-          style={{ display: "flex", flexWrap: "wrap" }}
-          noValidate
-          autoComplete="off"
-        >
-          <div>
-            <TextField
-              required={true}
-              id="name"
-              label="Name"
-              value={this.state.name}
-              onChange={this.handleChange}
-              style={{ marginRight: "10px", width: "200px" }}
-              margin="normal"
-            />
-            <TextField
-              required={true}
-              id="domain"
-              label="Domain"
-              value={this.state.domain}
-              onChange={this.handleChange}
-              style={{
-                marginLeft: "10px",
-                marginRight: "10px",
-                width: "200px"
-              }}
-              margin="normal"
-            />
-            <TextField
-              required={true}
-              id="description"
-              label="Description"
-              value={this.state.description}
-              onChange={this.handleChange}
-              style={{
-                marginLeft: "10px",
-                marginRight: "10px",
-                width: "400px"
-              }}
-              margin="normal"
-            />
-          </div>
-          <div>
-            <TextField
-              required={true}
-              id="courseId"
-              label="Course ID"
-              value={this.state.courseId}
-              onChange={this.handleChange}
-              style={{
-                marginRight: "10px",
-                width: "200px"
-              }}
-              margin="normal"
-            />
-            <TextField
-              required={true}
-              id="duration"
-              label="Duration"
-              value={this.state.duration}
-              onChange={this.handleChange}
-              style={{
-                marginLeft: "10px",
-                marginRight: "10px",
-                width: "200px"
-              }}
-              margin="normal"
-            />
-            <TextField
-              required={true}
-              id="num_of_questions"
-              label="No. Questions"
-              value={this.state.num_of_questions}
-              onChange={this.handleChange}
-              style={{
-                marginLeft: "10px",
-                marginRight: "10px",
-                width: "200px"
-              }}
-              margin="normal"
-            />
-          </div>
-        </form>
-
-        <Button
-          variant="contained"
-          color="primary"
-          style={{ marginTop: "25px", marginBottom: "10px" }}
-          onClick={this.submitData}
-        >
-          Search
-        </Button>
-      </Container>
-    );
-  }
+  return (
+    <Container>
+      <Paper className="root">
+        <Table className="table">
+          <TableHead>
+            <TableRow>
+              <TableCell>Name</TableCell>
+              <TableCell>Domain</TableCell>
+              <TableCell>Description</TableCell>
+              <TableCell>Course ID</TableCell>
+              <TableCell>Duration</TableCell>
+              <TableCell>No. Questions</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {theData.map(item => (
+              <TableDisplay
+                name={item.name}
+                domain={item.domain}
+                description={item.description}
+                courseId={item.test.courseId}
+                duration={item.test.duration}
+                num_of_questions={item.test.num_of_questions}
+              />
+            ))}
+          </TableBody>
+        </Table>
+      </Paper>
+      <form>
+        <FormControl style={{ width: "90px", marginTop: "10px" }}>
+          <InputLabel htmlFor="id-simple">Select ID</InputLabel>
+          <Select
+            value={id}
+            onChange={handleChange}
+            inputProps={{
+              name: "id",
+              id: "id-simple"
+            }}
+          >
+            <MenuItem value={1}>1</MenuItem>
+            <MenuItem value={2}>2</MenuItem>
+            <MenuItem value={3}>3</MenuItem>
+          </Select>
+        </FormControl>
+      </form>
+    </Container>
+  );
 }
-
-export default Search;

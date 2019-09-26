@@ -9,6 +9,7 @@ import Paper from "@material-ui/core/Paper";
 import Container from "@material-ui/core/Container";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
+import Typography from "@material-ui/core/Typography";
 
 class App extends Component {
   constructor(props) {
@@ -20,13 +21,15 @@ class App extends Component {
       description: "",
       courseId: "",
       num_of_questions: "",
-      duration: ""
+      duration: "",
+      newId: ""
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.submitData = this.submitData.bind(this);
     this.getData = this.getData.bind(this);
     this.secondSubmit = this.secondSubmit.bind(this);
+    this.delete = this.delete.bind(this);
   }
 
   submitData = e => {
@@ -44,11 +47,11 @@ class App extends Component {
 
   secondSubmit = () => {
     Axios.post("/api/tests", {
-      courseId: this.state.courseId,
+      courseId: this.state.newId,
       duration: this.state.duration,
       num_of_questions: this.state.num_of_questions
     })
-      .then(res => console.log(res))
+      .then(console.log(this.state.courseId))
       .then(this.getData())
       .catch(err => console.log(err));
   };
@@ -63,7 +66,12 @@ class App extends Component {
           data: data
         });
         console.log(this.state.data);
-      });
+      })
+      .then(() =>
+        this.setState({
+          newId: this.state.data.length + 1
+        })
+      );
   };
 
   handleChange = event => {
@@ -74,6 +82,11 @@ class App extends Component {
     this.setState({ [name]: value });
   };
 
+  delete = event => {
+    const target = event.target;
+    Axios.delete("/api/courses/" + target.id).then(this.getData);
+  };
+
   //on component mount call getData for api request
   componentDidMount() {
     this.getData();
@@ -82,6 +95,11 @@ class App extends Component {
   render() {
     return (
       <Container>
+        <Typography style={{ fontSize: "20px", marginBottom: "25px" }}>
+          <a style={{ color: "black", textDecoration: "none" }} href="/search">
+            Search
+          </a>
+        </Typography>
         <Paper className="root">
           <Table className="table">
             <TableHead>
@@ -105,6 +123,13 @@ class App extends Component {
                   <TableCell>{row.test.courseId}</TableCell>
                   <TableCell>{row.test.duration}</TableCell>
                   <TableCell>{row.test.num_of_questions}</TableCell>
+                  <Typography
+                    id={row.test.courseId}
+                    onClick={this.delete}
+                    style={{ color: "red", cursor: "pointer" }}
+                  >
+                    X
+                  </Typography>
                 </TableRow>
               ))}
             </TableBody>
@@ -116,6 +141,7 @@ class App extends Component {
           autoComplete="off"
         >
           <div>
+            <Typography style={{ marginTop: "10px" }}>Course Info</Typography>
             <TextField
               required={true}
               id="name"
@@ -123,7 +149,6 @@ class App extends Component {
               value={this.state.name}
               onChange={this.handleChange}
               style={{ marginRight: "10px", width: "200px" }}
-              margin="normal"
             />
             <TextField
               required={true}
@@ -136,7 +161,6 @@ class App extends Component {
                 marginRight: "10px",
                 width: "200px"
               }}
-              margin="normal"
             />
             <TextField
               required={true}
@@ -149,22 +173,10 @@ class App extends Component {
                 marginRight: "10px",
                 width: "400px"
               }}
-              margin="normal"
             />
           </div>
           <div>
-            <TextField
-              required={true}
-              id="courseId"
-              label="Course ID"
-              value={this.state.courseId}
-              onChange={this.handleChange}
-              style={{
-                marginRight: "10px",
-                width: "200px"
-              }}
-              margin="normal"
-            />
+            <Typography style={{ marginTop: "10px" }}>Test Info</Typography>
             <TextField
               required={true}
               id="duration"
@@ -172,11 +184,9 @@ class App extends Component {
               value={this.state.duration}
               onChange={this.handleChange}
               style={{
-                marginLeft: "10px",
                 marginRight: "10px",
                 width: "200px"
               }}
-              margin="normal"
             />
             <TextField
               required={true}
@@ -189,7 +199,6 @@ class App extends Component {
                 marginRight: "10px",
                 width: "200px"
               }}
-              margin="normal"
             />
           </div>
         </form>
