@@ -7,7 +7,6 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import Container from "@material-ui/core/Container";
-import TableDisplay from "../components/TableDisplay";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
@@ -33,6 +32,8 @@ export default function Search() {
     console.log(id);
   };
 
+  const testData = Object.values(theData);
+
   return (
     <Container>
       <Paper className="root">
@@ -48,16 +49,11 @@ export default function Search() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {theData.map(item => (
-              <TableDisplay
-                name={item.name}
-                domain={item.domain}
-                description={item.description}
-                courseId={item.test.courseId}
-                duration={item.test.duration}
-                num_of_questions={item.test.num_of_questions}
-              />
-            ))}
+            <TableRow>
+              {testData.map(item => (
+                <TableCell>{item}</TableCell>
+              ))}
+            </TableRow>
           </TableBody>
         </Table>
       </Paper>
