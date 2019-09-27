@@ -16,9 +16,8 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      //state for storing data from the api request for courses
       data: [],
-      name: "", //state for storing user data input for creating new courses and test
+      name: "",
       domain: "",
       description: "",
       courseId: "",
@@ -42,8 +41,9 @@ class App extends Component {
       domain: this.state.domain,
       description: this.state.description
     })
-      .then(this.secondSubmit()) //promise to call secondSubmit()
-      .then(this.getData()) //promist to call getData()
+      .then(res => console.log(res))
+      .then(this.secondSubmit())
+      .then(this.getData())
       .catch(err => console.log(err));
   };
 
@@ -54,21 +54,24 @@ class App extends Component {
       duration: this.state.duration,
       num_of_questions: this.state.num_of_questions
     })
-      .then(this.getData()) //promist to call getData()
+      .then(console.log(this.state.courseId))
+      .then(this.getData())
       .catch(err => console.log(err));
   };
 
   //api request to db to grab all courses and their associated tests
   getData = () => {
-    Axios.get("/api/courses")
+    fetch("/api/courses", {
+      method: "GET"
+    })
       .then(res => res.json())
       .then(data => {
         this.setState({
           data: data
         });
+        console.log(this.state.data);
       })
       .then(() =>
-        //promise to set the state of newId to the length of the data state and +1
         this.setState({
           newId: this.state.data.length + 1
         })
@@ -80,16 +83,17 @@ class App extends Component {
     const target = event.target;
     const name = target.id;
     const value = target.value;
+
     this.setState({ [name]: value });
   };
 
   //function to delete a user selected course and its associated test from the db
   delete = event => {
     const target = event.target;
-    Axios.delete("/api/courses/" + target.id).then(this.getData); //delete requst made to the db
+    Axios.delete("/api/courses/" + target.id).then(this.getData);
   };
 
-  //on component mount call getData for api request to populate view with existing db data
+  //on component mount call getData for api request
   componentDidMount() {
     this.getData();
   }
@@ -115,9 +119,7 @@ class App extends Component {
               </TableRow>
             </TableHead>
             <TableBody>
-              {this.state.data.map((
-                row //loop through each array object and display data to user on a table
-              ) => (
+              {this.state.data.map(row => (
                 <TableRow key={row.name}>
                   <TableCell component="th" scope="row">
                     {row.name}
@@ -127,10 +129,12 @@ class App extends Component {
                   <TableCell>{row.test.courseId}</TableCell>
                   <TableCell>{row.test.duration}</TableCell>
                   <TableCell>{row.test.num_of_questions}</TableCell>
-                  <Typography>
+                  <Typography
                     id={row.test.courseId}
                     onClick={this.delete}
-                    style={{ color: "red", cursor: "pointer" }}> X
+                    style={{ color: "red", cursor: "pointer" }}
+                  >
+                    X
                   </Typography>
                 </TableRow>
               ))}

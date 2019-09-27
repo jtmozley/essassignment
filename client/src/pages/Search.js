@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Axios from "axios";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -21,7 +20,8 @@ export default function Search() {
 
   //request to get a specific course which will also return the associated test
   const getData = () => {
-    Axios.get("/api/courses/" + id)
+    fetch("/api/courses/" + id)
+      .then(res => res.json())
       .then(res => {
         setTheData(res);
         console.log(res);
@@ -37,7 +37,7 @@ export default function Search() {
   };
 
   //experimental to take object values and store in testData wich will be an array
-  const testData = Object.values(theData);
+  // const testData = Object.values(theData);
 
   return (
     <Container>
@@ -55,11 +55,11 @@ export default function Search() {
           </TableHead>
           <TableBody>
             <TableRow>
-              {testData.map((
+              {/* {testData.map((
                 item //the goal is to loop through testData array and display each item as a table cell
               ) => (
                 <TableCell>{item}</TableCell>
-              ))}
+              ))} */}
             </TableRow>
           </TableBody>
         </Table>
