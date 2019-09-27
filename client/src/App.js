@@ -11,12 +11,14 @@ import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 
+//showing use of a class based component
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      //state for storing data from the api request for courses
       data: [],
-      name: "",
+      name: "", //state for storing user data input for creating new courses and test
       domain: "",
       description: "",
       courseId: "",
@@ -32,6 +34,7 @@ class App extends Component {
     this.delete = this.delete.bind(this);
   }
 
+  //post request to submit user input for created course to db
   submitData = e => {
     e.preventDefault();
     Axios.post("/api/courses", {
@@ -39,55 +42,54 @@ class App extends Component {
       domain: this.state.domain,
       description: this.state.description
     })
-      .then(res => console.log(res))
-      .then(this.secondSubmit())
-      .then(this.getData())
+      .then(this.secondSubmit()) //promise to call secondSubmit()
+      .then(this.getData()) //promist to call getData()
       .catch(err => console.log(err));
   };
 
+  //post request to submit user input for created test to db
   secondSubmit = () => {
     Axios.post("/api/tests", {
       courseId: this.state.newId,
       duration: this.state.duration,
       num_of_questions: this.state.num_of_questions
     })
-      .then(console.log(this.state.courseId))
-      .then(this.getData())
+      .then(this.getData()) //promist to call getData()
       .catch(err => console.log(err));
   };
 
+  //api request to db to grab all courses and their associated tests
   getData = () => {
-    fetch("/api/courses", {
-      method: "GET"
-    })
+    Axios.get("/api/courses")
       .then(res => res.json())
       .then(data => {
         this.setState({
           data: data
         });
-        console.log(this.state.data);
       })
       .then(() =>
+        //promise to set the state of newId to the length of the data state and +1
         this.setState({
           newId: this.state.data.length + 1
         })
       );
   };
 
+  //function to store the value of a text field into its specific state as it's typed by the user
   handleChange = event => {
     const target = event.target;
     const name = target.id;
     const value = target.value;
-
     this.setState({ [name]: value });
   };
 
+  //function to delete a user selected course and its associated test from the db
   delete = event => {
     const target = event.target;
-    Axios.delete("/api/courses/" + target.id).then(this.getData);
+    Axios.delete("/api/courses/" + target.id).then(this.getData); //delete requst made to the db
   };
 
-  //on component mount call getData for api request
+  //on component mount call getData for api request to populate view with existing db data
   componentDidMount() {
     this.getData();
   }
@@ -113,7 +115,9 @@ class App extends Component {
               </TableRow>
             </TableHead>
             <TableBody>
-              {this.state.data.map(row => (
+              {this.state.data.map((
+                row //loop through each array object and display data to user on a table
+              ) => (
                 <TableRow key={row.name}>
                   <TableCell component="th" scope="row">
                     {row.name}
@@ -123,12 +127,10 @@ class App extends Component {
                   <TableCell>{row.test.courseId}</TableCell>
                   <TableCell>{row.test.duration}</TableCell>
                   <TableCell>{row.test.num_of_questions}</TableCell>
-                  <Typography
+                  <Typography>
                     id={row.test.courseId}
                     onClick={this.delete}
-                    style={{ color: "red", cursor: "pointer" }}
-                  >
-                    X
+                    style={{ color: "red", cursor: "pointer" }}> X
                   </Typography>
                 </TableRow>
               ))}
