@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import useFetch from "fetch-suspense";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -10,6 +11,7 @@ import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
+import TableMain from "../components/TableMain";
 
 //state hook for storing returned data from the api request into theData
 export default function Search() {
@@ -20,7 +22,7 @@ export default function Search() {
 
   //request to get a specific course which will also return the associated test
   const getData = () => {
-    fetch("/api/courses/" + id)
+    usefetch("/api/courses/" + id)
       .then(res => res.json())
       .then(res => {
         setTheData(res);
