@@ -20,6 +20,6 @@
     "fetch-suspense": "^1.2.0",
     "mysql2": "^1.6.4",
     "react-router-dom": "^5.1.0",
-    "sequelize": "^4.41.2"
+    "sequelize": "^5.15.1"
   }
 }
